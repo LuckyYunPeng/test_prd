@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>计时器</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-subtle: #f7f7f8;
+    --fg: #0a0a0a;
+    --muted: #737373;
+    --muted-2: #a3a3a3;
+    --border: #e5e5e5;
+    --border-strong: #0a0a0a;
+    --ring: rgba(10,10,10,.08);
+    --danger: #b91c1c;
+    --mono: ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  }
+  html, body { background: var(--bg); }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Inter","PingFang SC",
+    "Segoe UI",sans-serif; color:var(--fg); min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:24px; -webkit-font-smoothing:antialiased; }
+  .card { width:100%; max-width:400px; background:var(--bg);
+    border:1px solid var(--border); border-radius:18px; padding:36px 32px 28px;
+    text-align:left; }
+  .meta-row { display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:28px; font-size:11px; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.08em; font-family:var(--mono); }
+  .meta-row .dot { display:inline-block; width:6px; height:6px; border-radius:50%;
+    background:var(--fg); margin-right:8px; vertical-align:1px; }
+  h1 { font-size:26px; font-weight:600; margin:0 0 4px;
+    letter-spacing:-.02em; line-height:1.2; }
+  .sub { color:var(--muted); font-size:13px; margin:0 0 32px; line-height:1.5;
+    font-family:var(--mono); }
+  .field { margin-bottom:14px; }
+  label { display:block; font-size:12px; font-weight:500; color:var(--fg);
+    margin-bottom:8px; letter-spacing:-.005em; }
+  input { width:100%; padding:12px 14px; border:1px solid var(--border);
+    border-radius:12px; font-size:14px; background:var(--bg); color:var(--fg);
+    outline:none; transition:border-color .15s, box-shadow .15s;
+    font-family:inherit; }
+  input::placeholder { color:var(--muted-2); }
+  input:focus { border-color:var(--border-strong); box-shadow:0 0 0 4px var(--ring); }
+  button { width:100%; padding:13px 16px; border:1px solid var(--border-strong);
+    border-radius:14px; background:var(--border-strong); color:var(--bg);
+    font-size:14px; font-weight:500; cursor:pointer; font-family:inherit;
+    transition:transform .08s, opacity .15s; letter-spacing:-.005em; }
+  button:hover { opacity:.9; }
+  button:active { transform:scale(.985); }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .err { color:var(--danger); font-size:13px; margin-top:14px; min-height:18px;
+    font-family:var(--mono); }
+  .author-line { font-size: 12px; color: var(--muted); margin: 0 0 8px;
+    font-family: var(--mono); display: flex; align-items: center; gap: 6px; }
+  .author-line .label { color: var(--muted-2); }
+  .author-line .name { color: var(--fg); font-weight: 500; }
+  .footer { margin-top:28px; padding-top:20px; border-top:1px solid var(--border);
+    font-size:12px; color:var(--muted); line-height:1.7; font-family:var(--mono); }
+  .footer .contact-line { display:block; }
+  .footer .contact { color:var(--fg); font-weight:500; }
+</style></head>
+<body>
+<div class="card" id="gate">
+  <div class="meta-row">
+    <span><span class="dot"></span>已加密</span>
+    <span>最新版本</span>
+  </div>
+  <h1>计时器</h1>
+  <p class="author-line"><span class="label">作者</span><span class="name">xiaohei</span></p>
+  <p class="sub">该原型已加密，请输入项目口令查看。</p>
+  <div class="field">
+    <label for="pw">项目口令</label>
+    <input id="pw" type="password" placeholder="输入口令" autofocus autocomplete="off">
+  </div>
+  <button id="btn">查看原型</button>
+  <div class="err" id="err"></div>
+  <div class="footer">
+    <div class="contact-line">遇到问题，企微请联系 <span class="contact">yunpeng.wang</span></div>
+    <div class="contact-line">微信请联系 <span class="contact">xiaohei-o_o</span></div>
+  </div>
+</div>
+<script>
+const PAYLOAD = {"ct": "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", "salt": "DaMSLtLAO4wpp1XaYJmczg==", "iv": "LYOgBR//OIvti6R0", "iter": 100000, "project": "\u8ba1\u65f6\u5668", "version": "\u6700\u65b0\u7248\u672c"};
+const STORAGE_KEY = 'proto_pw_' + PAYLOAD.project;
+const TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+function b64decode(s) {
+  const bin = atob(s); const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
+
+async function deriveKey(password, salt, iterations) {
+  const enc = new TextEncoder();
+  const baseKey = await crypto.subtle.importKey(
+    'raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']
+  );
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations, hash: 'SHA-256' },
+    baseKey,
+    { name: 'AES-GCM', length: 256 },
+    false, ['decrypt']
+  );
+}
+
+async function tryDecrypt(password) {
+  const salt = b64decode(PAYLOAD.salt);
+  const iv = b64decode(PAYLOAD.iv);
+  const ct = b64decode(PAYLOAD.ct);
+  const key = await deriveKey(password, salt, PAYLOAD.iter);
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ct);
+  return new TextDecoder().decode(plain);
+}
+
+function renderHtml(html) {
+  // 用 srcdoc iframe 渲染，隔离作用域
+  document.documentElement.innerHTML = '';
+  document.documentElement.style.cssText = 'margin:0;height:100%';
+  const body = document.createElement('body');
+  body.style.cssText = 'margin:0;height:100vh;overflow:hidden';
+  document.documentElement.appendChild(body);
+  const ifr = document.createElement('iframe');
+  ifr.style.cssText = 'border:0;width:100vw;height:100vh;display:block';
+  ifr.srcdoc = html;
+  body.appendChild(ifr);
+}
+
+async function attempt(password, savePassword) {
+  const err = document.getElementById('err');
+  err.textContent = '';
+  try {
+    const html = await tryDecrypt(password);
+    if (savePassword) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        password, expires: Date.now() + TTL_MS
+      }));
+    }
+    renderHtml(html);
+  } catch (e) {
+    err.textContent = '口令不正确，请重试';
+    const pw = document.getElementById('pw');
+    if (pw) { pw.value = ''; pw.focus(); }
+  }
+}
+
+(async function () {
+  const cached = localStorage.getItem(STORAGE_KEY);
+  if (cached) {
+    try {
+      const c = JSON.parse(cached);
+      if (c.expires > Date.now()) {
+        await attempt(c.password, false);
+        return;
+      } else {
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    } catch (e) {}
+  }
+  const pw = document.getElementById('pw');
+  const btn = document.getElementById('btn');
+  btn.onclick = () => attempt(pw.value, true);
+  pw.onkeydown = (e) => { if (e.key === 'Enter') attempt(pw.value, true); };
+})();
+</script>
+</body></html>
