@@ -1,0 +1,11 @@
+{
+  "计时器": {
+    "password": {
+      "hash_b64": "YDAkYpKn+UUF3zo4Yv33hTtecD7PbUaiK96KMkGif6E=",
+      "salt_b64": "/FFwmVcQwIEeOVeGwlXiGQ==",
+      "iterations": 100000
+    },
+    "author": "xiaohei",
+    "created_at": "2026-04-28_17-47-05"
+  }
+}
