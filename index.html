@@ -79,26 +79,45 @@ h1 { font-size: 36px; font-weight: 600; margin: 0 0 12px;
 .footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border);
   font-family: var(--mono); font-size: 11px; color: var(--muted);
   text-transform: uppercase; letter-spacing: .08em;
-  display: flex; justify-content: space-between; align-items: center; }
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px; flex-wrap: wrap; }
 .footer .contact { color: var(--fg); font-weight: 500; text-transform: none;
   letter-spacing: 0; }
+.footer .contacts { display: inline-flex; align-items: center; gap: 8px;
+  flex-wrap: wrap; }
+.footer .dot-sep { color: var(--muted-2); }
+@media (max-width: 480px) {
+  .footer { flex-direction: column; align-items: flex-start; }
+}
 </style></head><body><div class="container">
-<div class="eyebrow"><span class="dot"></span>原型索引<span class="sep">·</span>1 个项目</div>
+<div class="eyebrow"><span class="dot"></span>原型索引<span class="sep">·</span>2 个项目</div>
 <h1>原型索引</h1>
 <p class="subtitle">所有原型均经过加密。每个项目使用独立口令，输入一次后该项目所有版本在浏览器内 7 天免重输。</p>
 <div class="list-header"><span>项目</span><span>版本数</span></div>
 <div class="list">
 
-                <a class="card" href="./%E7%A7%92%E8%A1%A8/latest.html">
+                <a class="card" href="./%E7%A7%92%E8%A1%A8/">
                   <div class="card-main">
                     <div class="card-name">秒表</div>
                     <div class="card-meta">2 个版本</div>
                   </div>
                   <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
                 </a>
+
+                <a class="card" href="./%E8%AE%A1%E6%97%B6%E5%99%A8/">
+                  <div class="card-main">
+                    <div class="card-name">计时器</div>
+                    <div class="card-meta">1 个版本 · 作者 xiaohei</div>
+                  </div>
+                  <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+                </a>
 </div>
 <div class="footer">
   <span>已加密 · 7 天免重输</span>
-  <span>遇到问题，请联系 <span class="contact">yunpeng.wang</span></span>
+  <span class="contacts">
+    <span>企微 <span class="contact">yunpeng.wang</span></span>
+    <span class="dot-sep">·</span>
+    <span>微信 <span class="contact">xiaohei-o_o</span></span>
+  </span>
 </div>
 </div></body></html>
